@@ -1,17 +1,47 @@
 <template>
-  <div class="home">
-    <HelloWorld></HelloWorld>
+  <div class="row">
+    <div class="col-8">
+      <div v-if="searchTerm !== ''">
+        Searching for {{ searchTerm }}. {{ filteredCards.length }} of {{ cards.length }}
+      </div>
+
+      <InstagramCard v-bind:key="card.title" v-bind:info="card" v-for="card in filteredCards" />
+      <InstagramCard v-bind:key="card.from" v-bind:info="card" v-for="card in filteredCards" />
+
+    </div>
+    <div class="col-4">
+      Ovo je sidebar
+    </div>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import InstagramCard from '@/components/InstagramCard.vue'
+import store from "@/store.js"
 
 export default {
+  data () {
+    return store;
+  },
+  computed: {
+    filteredCards () {
+      return this.cards.filter(card => card.title.includes(this.searchTerm) || card.from.includes(this.searchTerm))
+    }
+  },
   name: 'home',
   components: {
-    HelloWorld
+    InstagramCard
   }
 }
 </script>
+
+<style lang="scss">
+
+.card {
+  margin-bottom: 20px;
+
+  .card-body {
+    padding: 0px;
+  }
+}
+</style>
